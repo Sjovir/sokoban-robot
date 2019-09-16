@@ -34,9 +34,9 @@ class DriveBehavior:
     def follow_Line(self):
         while(self.running):
             colorData =  colorSensor.value()
-            if(colorData = self.colorRight):
+            if(colorData <= self.colorRight):
                 navigator.left()
-            elif(colorData = self.colorLeft):
+            elif(colorData >= self.colorLeft):
                 navigator.right()
             else:
                 navigator.forward()
