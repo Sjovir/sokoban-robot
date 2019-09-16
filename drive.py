@@ -23,7 +23,7 @@ class DriveBehavior:
     # Start Method.
     def turn_On(self):
         self.running = True
-        thread = Thread(target = follow_Line)
+        thread = Thread(target = self.follow_Line)
         thread.start()
 
     # Stop Method.
@@ -33,15 +33,12 @@ class DriveBehavior:
     # Follow Line.
     def follow_Line(self):
         while(self.running):
-            colorData =  colorSensor.value()
+            colorData =  self.colorSensor.value()
             if(colorData <= self.colorRight):
-                navigator.left()
+                self.navigator.left()
             elif(colorData >= self.colorLeft):
-                navigator.right()
+                self.navigator.right()
             else:
-                navigator.forward()
-        navigator.stop()
+                self.navigator.forward()
+        self.navigator.stop()
     
-
-
-obj = DriveBehavior()
