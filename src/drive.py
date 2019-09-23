@@ -37,12 +37,12 @@ class DriveBehavior:
         previous_error = 0
 
         # Initial measurement.
-        colorData =  self.colorSensor.value()
+        colorData =  self.limitedColorData()
 
         while(self.running):
 
             # Calculate steering with PID
-            error = colorData - self.colorSensor.value()
+            error = colorData - self.limitedColorData()
             integral += (error * dt)
             derivative = (error - previous_error) / dt
 
@@ -71,4 +71,11 @@ class DriveBehavior:
             previous_error = error
 
         self.navigator.stop()
+
+    def limitedColorData(self):
+        colorData = self.colorSensor.value()
+        if colorData > 70 return 70
+        elif colorData < 30 return 30
+        else return colorData
+
     
