@@ -3,7 +3,6 @@ from threading import Thread
 from time import sleep
 
 class DriveBehavior:
-    behavior = "Drive"
     colorSensor = None
     navigator = None
     colorTarget = 0
@@ -14,8 +13,6 @@ class DriveBehavior:
     def __init__(self, navigator, colorSensor, colorTarget):
         self.colorSensor = colorSensor
         self.navigator = navigator
-        self.colorDark = colorDark
-        self.colorLight = colorLight
         self.colorTarget = colorTarget
 
     # Start Method.
@@ -30,14 +27,37 @@ class DriveBehavior:
 
     # Follow Line.
     def follow_Line(self):
+        # PID tuning
+        Kp = 1 # proportional gain
+        Ki = 0 # integral gain
+        Kd = 0 # derivative gain
+        dt = 500 # milliseconds
+        
+        integral = 0
+        previous_error = 0
+
+        # Initial measurement.
+        colorData =  self.colorSensor.value()
+
         while(self.running):
-            colorData =  self.colorSensor.value()
-            print("Color: ", colorData)
-            if(colorData < self.colorTarget):
-                self.navigator.right()
-            elif(colorData > self.colorTarget):
-                self.navigator.left()
-            else:
-                self.navigator.forward()
+
+            # Calculate steering with PID
+            error = colorData - self.colorSensor.value()
+            integral += (error * dt)
+            derivative = (error - previous_error) / dt
+
+            u = (Kp * error) + (Ki * integral) + (Kd * derivative)
+
+            if self.navigator.getSpeed() + abs(u) > 1000:
+                if u >= 0:
+                    u = 1000 - self.navigator.getSpeed()
+                else:
+                    u = self.navigator.getSpeed() - 1000
+
+            print("u value: ", u)
+
+            # Save error as previous error
+            previous_error = error
+
         self.navigator.stop()
     

@@ -34,3 +34,6 @@ class Navigator:
     def stop(self):
         self.leftMotor.duty_cycle_sp = 0
         self.rightMotor.duty_cycle_sp = 0
+
+    def getSpeed(self):
+        return self.speed
