@@ -1,8 +1,7 @@
 class Navigator:
-    def __init__(self, leftMotor, rightMotor, speed, dt, compensateSpeed, turnSpeed):
+    def __init__(self, leftMotor, rightMotor, speed, dt, turnSpeed):
         self.speed = speed
         self.dt = dt
-        self.compensateSpeed = compensateSpeed
         self.turnSpeed = turnSpeed
 
         self.leftMotor = leftMotor

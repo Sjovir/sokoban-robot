@@ -48,12 +48,17 @@ class DriveBehavior:
 
             u = (Kp * error) + (Ki * integral) + (Kd * derivative)
 
+            # Determine rigth or left navigation
             if self.navigator.getSpeed() + abs(u) > 1000:
                 if u >= 0:
                     u = 1000 - self.navigator.getSpeed()
+                    self.navigator.right(u)
                 else:
                     u = self.navigator.getSpeed() - 1000
-
+                    self.navigator.left(u)
+            
+            # Wait dt        
+            sleep(self.navigator.getDt / 1000)
             print("u value: ", u)
 
             # Save error as previous error
