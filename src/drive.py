@@ -6,14 +6,12 @@ class DriveBehavior:
     behavior = "Drive"
     colorSensor = None
     navigator = None
-    colorDark = 0
-    colorLight = 0
     colorTarget = 0
     running = False
     thread = None
 
     # Constructor.
-    def __init__(self, navigator, colorSensor, colorDark, colorLight, colorTarget):
+    def __init__(self, navigator, colorSensor, colorTarget):
         self.colorSensor = colorSensor
         self.navigator = navigator
         self.colorDark = colorDark
@@ -35,9 +33,9 @@ class DriveBehavior:
         while(self.running):
             colorData =  self.colorSensor.value()
             print("Color: ", colorData)
-            if(colorData <= self.colorTarget):
+            if(colorData < self.colorTarget):
                 self.navigator.right()
-            elif(colorData >= self.colorTarget):
+            elif(colorData > self.colorTarget):
                 self.navigator.left()
             else:
                 self.navigator.forward()
