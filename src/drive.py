@@ -31,7 +31,7 @@ class DriveBehavior:
         Kp = 1 # proportional gain
         Ki = 0 # integral gain
         Kd = 0 # derivative gain
-        dt = 500 # milliseconds
+        dt = self.navigator.getDt()
         
         integral = 0
         previous_error = 0

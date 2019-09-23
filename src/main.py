@@ -25,7 +25,7 @@ assert colorSensor.connected, "ColorSensor is not connected"
 
 lightData = ultrasonicSensor.value()
 
-navigator = Navigator(motor1, motor2, 50, 5, 50)
+navigator = Navigator(motor1, motor2, 500, 50, 5, 50)
 driveBehavior = DriveBehavior(navigator, colorSensor, 56)
 
 navigator.start()
