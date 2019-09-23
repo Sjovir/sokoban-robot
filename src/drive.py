@@ -29,7 +29,7 @@ class DriveBehavior:
     def follow_Line(self):
         # PID tuning
         Kp = 1 # proportional gain
-        Ki = 0 # integral gain
+        Ki = 0.01 # integral gain
         Kd = 0 # derivative gain
         dt = self.navigator.getDt()
         
@@ -48,17 +48,23 @@ class DriveBehavior:
 
             u = (Kp * error) + (Ki * integral) + (Kd * derivative)
 
-            # Determine rigth or left navigation
+            # Determine right or left navigation
+            print("Value: ", self.navigator.getSpeed() + abs(u))
             if self.navigator.getSpeed() + abs(u) > 1000:
                 if u >= 0:
                     u = 1000 - self.navigator.getSpeed()
-                    self.navigator.right(u)
                 else:
                     u = self.navigator.getSpeed() - 1000
-                    self.navigator.left(u)
-            
+
+            # if u >= 0:
+            #     self.navigator.drive(u)
+            #     print("Driving right")
+            # else:
+            #     self.navigator.drive(u)
+            #     print("Driving left")
+            self.navigator.drive(u)
             # Wait dt        
-            sleep(self.navigator.getDt / 1000)
+            sleep(self.navigator.getDt() / 1000)
             print("u value: ", u)
 
             # Save error as previous error

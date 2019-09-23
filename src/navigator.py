@@ -17,17 +17,23 @@ class Navigator:
         self.leftMotor.run_timed(self.dt, self.speed)
         self.rightMotor.run_timed(self.dt, self.speed)
 
+    def drive(self, compensateSpeed):
+        self.leftMotor.run_timed(time_sp=self.dt, speed_sp=self.speed + compensateSpeed)
+        self.rightMotor.run_timed(time_sp=self.dt, speed_sp=self.speed - compensateSpeed)
+
     def left(self, compensateSpeed):
         # self.leftMotor.duty_cycle_sp = self.speed + self.compensateSpeed
         # self.rightMotor.duty_cycle_sp = self.speed - self.compensateSpeed
-        self.leftMotor.run_timed(self.dt, self.speed + compensateSpeed)
-        self.rightMotor.run_timed(self.dt, self.speed - compensateSpeed)
+        self.leftMotor.run_timed(time_sp=self.dt, speed_sp=self.speed + compensateSpeed)
+        self.rightMotor.run_timed(time_sp=self.dt, speed_sp=self.speed - compensateSpeed)
+        print("Left: ", self.speed + compensateSpeed)
 
     def right(self, compensateSpeed):
         # self.leftMotor.duty_cycle_sp = self.speed - self.compensateSpeed
         # self.rightMotor.duty_cycle_sp = self.speed + self.compensateSpeed
-        self.leftMotor.run_timed(self.dt, self.speed - compensateSpeed)
-        self.rightMotor.run_timed(self.dt, self.speed + compensateSpeed)
+        self.leftMotor.run_timed(time_sp=self.dt, speed_sp=self.speed + compensateSpeed)
+        self.rightMotor.run_timed(time_sp=self.dt, speed_sp=self.speed - compensateSpeed)
+        print("Left: ", self.speed + compensateSpeed)
     
     def turnLeft(self):
         self.leftMotor.duty_cycle_sp = -self.turnSpeed

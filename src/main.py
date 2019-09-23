@@ -33,24 +33,9 @@ driveBehavior.turn_On()
 
 while not btn.any():
     lightData = ultrasonicSensor.value()
-    print("Distance: ", lightData)
+    # print("Distance: ", lightData)
 
 driveBehavior.turn_Off()
-
-# while not btn.any():
-#     lightData = ultrasonicSensor.value()
-#     colorData = colorSensor.value()
-
-#     if not lightData < stopLength and colorData is not 6:
-#         motor1.duty_cycle_sp = speed
-#         motor2.duty_cycle_sp = speed
-#         print('Distance: ' + str(lightData) + ' - Color: ' + str(colorData))
-#     else:
-#         motor1.duty_cycle_sp = 0
-#         motor2.duty_cycle_sp = 0
-
-#motor1.duty_cycle_sp = 0
-#motor2.duty_cycle_sp = 0
 print('Exit')
 exit(0)
 
