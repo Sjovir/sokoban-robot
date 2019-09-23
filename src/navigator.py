@@ -1,54 +1,38 @@
 class Navigator:
-    def __init__(self, leftMotor, rightMotor, speed, dt, turnSpeed):
+    def __init__(self, left_motor, right_motor, speed, dt, turn_speed):
         self.speed = speed
         self.dt = dt
-        self.turnSpeed = turnSpeed
+        self.turn_speed = turn_speed
 
-        self.leftMotor = leftMotor
-        self.rightMotor = rightMotor
+        self.left_motor = left_motor
+        self.right_motor = right_motor
 
     def start(self):
-        self.leftMotor.run_direct()
-        self.rightMotor.run_direct()
+        self.left_motor.run_direct()
+        self.right_motor.run_direct()
     
     def forward(self):
-    #     self.leftMotor.duty_cycle_sp = self.speed
-    #     self.rightMotor.duty_cycle_sp = self.speed
-        self.leftMotor.run_timed(self.dt, self.speed)
-        self.rightMotor.run_timed(self.dt, self.speed)
+        self.left_motor.run_timed(time_sp=self.dt, speed_sp=self.speed)
+        self.right_motor.run_timed(time_sp=self.dt, speed_sp=self.speed)
 
-    def drive(self, compensateSpeed):
-        self.leftMotor.run_timed(time_sp=self.dt, speed_sp=self.speed + compensateSpeed)
-        self.rightMotor.run_timed(time_sp=self.dt, speed_sp=self.speed - compensateSpeed)
-
-    def left(self, compensateSpeed):
-        # self.leftMotor.duty_cycle_sp = self.speed + self.compensateSpeed
-        # self.rightMotor.duty_cycle_sp = self.speed - self.compensateSpeed
-        self.leftMotor.run_timed(time_sp=self.dt, speed_sp=self.speed + compensateSpeed)
-        self.rightMotor.run_timed(time_sp=self.dt, speed_sp=self.speed - compensateSpeed)
-        print("Left: ", self.speed + compensateSpeed)
-
-    def right(self, compensateSpeed):
-        # self.leftMotor.duty_cycle_sp = self.speed - self.compensateSpeed
-        # self.rightMotor.duty_cycle_sp = self.speed + self.compensateSpeed
-        self.leftMotor.run_timed(time_sp=self.dt, speed_sp=self.speed + compensateSpeed)
-        self.rightMotor.run_timed(time_sp=self.dt, speed_sp=self.speed - compensateSpeed)
-        print("Left: ", self.speed + compensateSpeed)
+    def drive(self, compensate_speed):
+        self.left_motor.run_timed(time_sp=self.dt, speed_sp=self.speed + compensate_speed)
+        self.right_motor.run_timed(time_sp=self.dt, speed_sp=self.speed - compensate_speed)
     
-    def turnLeft(self):
-        self.leftMotor.duty_cycle_sp = -self.turnSpeed
-        self.rightMotor.duty_cycle_sp = self.turnSpeed
+    def turn_left(self):
+        self.left_motor.run_timed(time_sp=self.dt, speed_sp=-self.turn_speed)
+        self.right_motor.run_timed(time_sp=self.dt, speed_sp=self.turn_speed)
     
-    def turnRight(self):
-        self.leftMotor.duty_cycle_sp = self.turnSpeed
-        self.rightMotor.duty_cycle_sp = -self.turnSpeed
+    def turn_right(self):
+        self.left_motor.run_timed(time_sp=self.dt, speed_sp=self.turn_speed)
+        self.right_motor.run_timed(time_sp=self.dt, speed_sp=-self.turn_speed)
 
     def stop(self):
-        self.leftMotor.duty_cycle_sp = 0
-        self.rightMotor.duty_cycle_sp = 0
+        self.left_motor.duty_cycle_sp = 0
+        self.right_motor.duty_cycle_sp = 0
 
-    def getSpeed(self):
+    def get_speed(self):
         return self.speed
 
-    def getDt(self):
+    def get_dt(self):
         return self.dt   
