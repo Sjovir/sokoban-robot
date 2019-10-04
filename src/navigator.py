@@ -31,6 +31,9 @@ class Navigator:
         self.left_motor.duty_cycle_sp = 0
         self.right_motor.duty_cycle_sp = 0
 
+    def set_speed(self, value):
+        self.speed = value
+
     def get_speed(self):
         return self.speed
 

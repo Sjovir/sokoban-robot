@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1141abbc-655c-4cda-ba4d-4dd4f570c6a6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/intersect_behavior.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/StormInTheMindTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/StormInTheMindTest.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/behavior.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/behavior.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/drive_behavior.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/drive_behavior.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigator.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
