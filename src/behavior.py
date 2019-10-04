@@ -3,12 +3,20 @@ from navigator import Navigator
 
 class Behavior:
     def __init__(self):
-        self.colorSensor = ev3.ColorSensor('in1')
-        self.motor1 = ev3.LargeMotor('outC')
-        self.motor2 = ev3.LargeMotor('outD')
-        self.navigator = Navigator(self.motor1, self.motor2, 200, 200, 50)
-        self.ultrasonicSensor = ev3.UltrasonicSensor('in2')
-        self.ultrasonicSensor.mode = 'US-DIST-CM'
-
-        assert self.ultrasonicSensor.connected, "UltrasonicSensor is not connected"
-        assert self.colorSensor.connected, "ColorSensor is not connected"
+        # Sensors
+        self.drive_color_sensor = ev3.ColorSensor('in3')
+        self.intersect_color_sensor = ev3.ColorSensor('in4')
+        # self.can_touch_sensor = ev3.TouchSensor('in2')
+        self.can_dist_sensor = ev3.UltrasonicSensor('in2')
+        # Motors
+        self.left_motor = ev3.LargeMotor('outA')
+        self.right_motor = ev3.LargeMotor('outD')
+        # Computations
+        self.navigator = Navigator(self.left_motor, self.right_motor, 200, 200, 50)
+        # Configs
+        self.can_dist_sensor.mode = 'US-DIST-CM'
+        # Checks
+        assert self.drive_color_sensor.connected, "Drive sensor is not connected"
+        assert self.intersect_color_sensor.connected, "Intersect sensor is not connected"
+        # assert self.can_touch_sensor.connected, "Can sensor is not connected"
+        assert self.can_dist_sensor.connected, "Can sensor is not connected"
