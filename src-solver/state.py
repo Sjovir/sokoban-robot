@@ -14,7 +14,7 @@ def add_state(player_position, box_positions):
 
 def is_state_new(player_position, box_position):
     check_state = state_to_string(player_position, box_position)
-    print('checking state:', check_state)
+    # print('checking state:', check_state)
     if check_state in states:
         return False
     else:

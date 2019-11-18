@@ -1,11 +1,12 @@
 from state import states, add_state, is_state_new, state_to_string
+from typing import Optional
 import time
 
 class Solver:
     def __init__(self):
         self.map = []
         self.original_map = []
-        self.goal_index = -1
+        self.goal_indeces = -1
         self.width = -1
         self.height = -1
 
@@ -19,10 +20,10 @@ class Solver:
                         self.original_map.append(tile)       # Add tile to map
 
         self.map = self.original_map.copy()
-        self.goal_index = self.original_map.index('G')
+        self.goal_indeces = [index for index, condition in enumerate(self.original_map) if condition == 'G']
 
     def solve_puzzle(self):
-        print('Solving...', self.map)
+        # print('Solving...', self.map)
 
         paths = [[self.__get_player_position()]]
         add_state(self.__get_player_position(), self.__get_jewels_positions())
@@ -30,96 +31,81 @@ class Solver:
         while True:
             for path_index in range(len(paths) - 1, -1, -1):
                 path = paths[path_index]
-                print('** checking:', path, '**')
                 self.__update_map(path)
 
                 player_pos = path[-1]
                 moves = self.__get_walkable_directions(player_pos)
-                print(moves)
-                if len(moves) > 1:
-                    for index in range(len(moves) - 1, -1, -1):
-                        self.__update_map(path)
-                        new_pos = moves[index]
 
-                        if index is 0:
-                            path.append(new_pos)
-                            winner_path, new_state = self.__check_new_path(path)
-                            if len(winner_path) is not 0:
-                                return winner_path
+                # print('** checking:', path, '** Valid moves:', moves, ' ** jewel:')
+                for index in range(len(moves) - 1, -1, -1):
+                    self.__update_map(path)
 
-                            if not new_state:
-                                print('removed', path[-1], 'path', path)
-                                path = path[:-1]
-
-                            paths[path_index] = path
-                            print('path', path)
-                        else:
-                            new_path = path.copy()
-                            current_pos = path[-1]
-                            self.__move_player(current_pos, new_pos)
-
-                            jewel_pos = self.__get_jewels_positions()
-
-                            if not is_state_new(new_pos, jewel_pos):
-                                continue
-
-                            add_state(new_pos, jewel_pos)
-                            new_path.append(new_pos)
-
-                            if self.__check_win_condition(jewel_pos):
-                                return path
-
-                            paths.append(new_path)
-                            print('path', new_path)
-
-                else:
                     current_pos = path[-1]
-                    new_pos = moves[0]
+                    new_pos = moves[index]
                     self.__move_player(current_pos, new_pos)
 
                     jewel_pos = self.__get_jewels_positions()
 
-                    if not is_state_new(new_pos, jewel_pos):
+                    if not is_state_new(new_pos, jewel_pos):# or self.__check_deadlock(jewel_pos):
+                        if index is 0:
+                            del paths[path_index]
                         continue
 
                     add_state(new_pos, jewel_pos)
-                    path.append(new_pos)
 
-                    if self.__check_win_condition(jewel_pos):
-                        return path
+                    if index is 0:
+                        path.append(new_pos)
 
-                    paths[path_index] = path
-                    print('path', path)
+                        if self.__check_win_condition(jewel_pos):
+                            return path
 
-            print('paths:', paths)
-            time.sleep(1)
+                        paths[path_index] = path
+                    else:
+                        new_path = path.copy()
+                        new_path.append(new_pos)
 
-    def __check_new_path(self, path):
-        new_pos = path[-1]
-        # self.__update_map(path, len(path) - 1)
-        self.__move_player(path[-1], new_pos)
+                        if self.__check_win_condition(jewel_pos):
+                            return new_path
 
-        jewels_pos = self.__get_jewels_positions()
+                        paths.append(new_path)
+                    # self.__print_map()
 
-        if self.__check_win_condition(jewels_pos):
-            return path
+            # print('paths:', paths)
+            print('paths:', len(paths), 'length:', len(paths[0]))
+            # print()
+            # time.sleep(1)
 
-        new_state = is_state_new(new_pos, jewels_pos)
-        if new_state:
-            add_state(new_pos, jewels_pos)
+    def __check_deadlock(self, jewel_pos):
+        for tile_index in jewel_pos:
+            invalid = ['X', 'J']
 
-        return [], new_state
+            # print(tile_index, ':', 'above', self.map[self.__above(tile_index)], 'below', self.map[self.__below(tile_index)],
+            #       'left', self.map[self.__left(tile_index)], 'right', self.map[self.__right(tile_index)])
+            if self.map[self.__above(tile_index)] in invalid:
+                if self.map[self.__left(tile_index)] in invalid or self.map[self.__right(tile_index)] in invalid:
+                    print('Deadlock up')
+                    return True
+            if self.map[self.__below(tile_index)] in invalid:
+                if self.map[self.__left(tile_index)] in invalid or self.map[self.__right(tile_index)] in invalid:
+                    print('Deadlock down')
+                    return True
+            if self.map[self.__left(tile_index)] in invalid:
+                if self.map[self.__above(tile_index)] in invalid or self.map[self.__below(tile_index)] in invalid:
+                    print('Deadlock left')
+                    return True
+            if self.map[self.__right(tile_index)] in invalid:
+                if self.map[self.__above(tile_index)] in invalid or self.map[self.__below(tile_index)] in invalid:
+                    print('Deadlock right')
+                    return True
 
-    def __check_deadlock(self):
-        pass
+        return False
 
-    def __check_win_condition(self, jewel_index):
-        # jewel_index = self.map.index('J')
-        # goal_index = self.original_map.index('G')
-        if jewel_index is self.goal_index:
-            return True
-        else:
-            return False
+    def __check_win_condition(self, jewel_indices):
+        for jewel in jewel_indices:
+            if not jewel in self.goal_indeces:
+                return False
+
+        return True
 
     def __update_map(self, moves, index=1):
         self.map = self.original_map.copy()
@@ -131,17 +117,17 @@ class Solver:
             index += 1
 
     def __move_player(self, starting_tile, destination_tile):
-        if destination_tile is 'J':
+        if self.map[destination_tile] is 'J':
             diff = destination_tile - starting_tile
             direction = ''
 
-            if diff is - self.width:
+            if diff == - self.width:
                 direction = 'up'
-            elif diff is self.width:
+            elif diff == self.width:
                 direction = 'down'
-            elif diff is - 1:
+            elif diff == - 1:
                 direction = 'left'
-            elif diff is 1:
+            elif diff == 1:
                 direction = 'right'
 
             tile_index = self.__get_tile(direction, destination_tile)
@@ -149,7 +135,9 @@ class Solver:
             self.map[tile_index] = 'J'
 
         self.map[destination_tile] = 'M'
-        self.map[starting_tile] = self.original_map[starting_tile]
+
+        original_tile = self.original_map[starting_tile]
+        self.map[starting_tile] = original_tile if not original_tile in ['M', 'J'] else '.'
 
     def __get_player_position(self):
         return self.map.index('M')
@@ -163,14 +151,10 @@ class Solver:
         left = self.__get_tile('left', index, ['X'])
         right = self.__get_tile('right', index, ['X'])
 
-        if up is not None and self.map[up] is 'J' and self.__get_tile('up', up, ['X', 'J']) is None:
-            up = None
-        if down is not None and self.map[down] is 'J' and self.__get_tile('down', down, ['X', 'J']) is None:
-            down = None
-        if left is not None and self.map[left] is 'J' and self.__get_tile('left', left, ['X', 'J']) is None:
-            left = None
-        if right is not None and self.map[right] is 'J' and self.__get_tile('right', right, ['X', 'J']) is None:
-            right = None
+        up = self.__validate_jewel_move('up', up)
+        down = self.__validate_jewel_move('down', down)
+        left = self.__validate_jewel_move('left', left)
+        right = self.__validate_jewel_move('right', right)
 
         directions = []
 
@@ -183,13 +167,13 @@ class Solver:
         if right is not None:
             directions.append(right)
 
-        # directions = [up, down, left, right]
-
-        # for direction in directions:
-        #     if direction is None or direction is 'X':
-        #         directions.remove(direction)
-
         return directions
+
+    def __validate_jewel_move(self, relation, index) -> Optional[int]:
+        if index is not None and self.map[index] is 'J' and self.__get_tile(relation, index, ['X', 'J']) is None:
+            return None
+
+        return index
 
     def __get_tile(self, relation, index, remove_conditions=[]):
         try:
@@ -205,7 +189,7 @@ class Solver:
                 tile_index = -1
                 print('Unknown relation')
                 raise Exception
-        except:
+        except Exception:
             return None
 
         if self.map[tile_index] in remove_conditions:
@@ -234,3 +218,13 @@ class Solver:
         if tile_index % self.width == 0:
             raise Exception
         return tile_index
+
+    def __print_map(self):
+        print('** Map **')
+        for index_y in range(0, self.height):
+            line = ''
+            for index_x in range(0, self.width):
+                line += self.map[index_y * self.height + index_x]
+
+            print(line)
+        pass
