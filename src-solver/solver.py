@@ -40,13 +40,12 @@ class Solver:
                 for index in range(len(moves) - 1, -1, -1):
                     self.__update_map(path)
 
-                    current_pos = path[-1]
                     new_pos = moves[index]
-                    self.__move_player(current_pos, new_pos)
+                    self.__move_player(player_pos, new_pos)
 
                     jewel_pos = self.__get_jewels_positions()
 
-                    if not is_state_new(new_pos, jewel_pos):# or self.__check_deadlock(jewel_pos):
+                    if not is_state_new(new_pos, jewel_pos) or self.__check_deadlock(jewel_pos):
                         if index is 0:
                             del paths[path_index]
                         continue
@@ -72,37 +71,75 @@ class Solver:
 
             # print('paths:', paths)
             print('paths:', len(paths), 'length:', len(paths[0]))
-            # print()
-            # time.sleep(1)
+            print()
+            # time.sleep(.1)
 
     def __check_deadlock(self, jewel_pos):
-        for tile_index in jewel_pos:
-            invalid = ['X', 'J']
+        for jewel_index in jewel_pos:
+            if jewel_index in self.goal_indeces:
+                continue
 
-            # print(tile_index, ':', 'above', self.map[self.__above(tile_index)], 'below', self.map[self.__below(tile_index)],
-            #       'left', self.map[self.__left(tile_index)], 'right', self.map[self.__right(tile_index)])
-            if self.map[self.__above(tile_index)] in invalid:
-                if self.map[self.__left(tile_index)] in invalid or self.map[self.__right(tile_index)] in invalid:
-                    print('Deadlock up')
+            # Jewels in corner
+            if self.map[self.__above(jewel_index)] is 'X':
+                if self.map[self.__left(jewel_index)] is 'X' or self.map[self.__right(jewel_index)] is 'X':
+                    # self.__print_map()
                     return True
-            if self.map[self.__below(tile_index)] in invalid:
-                if self.map[self.__left(tile_index)] in invalid or self.map[self.__right(tile_index)] in invalid:
-                    print('Deadlock down')
+            if self.map[self.__below(jewel_index)] is 'X':
+                if self.map[self.__left(jewel_index)] is 'X' or self.map[self.__right(jewel_index)] is 'X':
+                    # self.__print_map()
                     return True
-            if self.map[self.__left(tile_index)] in invalid:
-                if self.map[self.__above(tile_index)] in invalid or self.map[self.__below(tile_index)] in invalid:
-                    print('Deadlock left')
+            if self.map[self.__left(jewel_index)] is 'X':
+                if self.map[self.__above(jewel_index)] is 'X' or self.map[self.__below(jewel_index)] is 'X':
+                    # self.__print_map()
                     return True
-            if self.map[self.__right(tile_index)] in invalid:
-                if self.map[self.__above(tile_index)] in invalid or self.map[self.__below(tile_index)] in invalid:
-                    print('Deadlock right')
+            if self.map[self.__right(jewel_index)] is 'X':
+                if self.map[self.__above(jewel_index)] is 'X' or self.map[self.__below(jewel_index)] is 'X':
+                    # self.__print_map()
+                    return True
+
+            # Jewels next to each other next to walls
+            if self.map[self.__above(jewel_index)] is 'X':
+                left_index = self.__left(jewel_index)
+                right_index = self.__right(jewel_index)
+                if self.map[left_index] is 'J' and (self.map[self.__above(left_index)] is 'X' or self.map[self.__below(left_index)] is 'X'):
+                    # self.__print_map()
+                    return True
+                elif self.map[right_index] is 'J' and (self.map[self.__above(right_index)] is 'X' or self.map[self.__below(left_index)] is 'X'):
+                    # self.__print_map()
+                    return True
+            if self.map[self.__below(jewel_index)] is 'X':
+                left_index = self.__left(jewel_index)
+                right_index = self.__right(jewel_index)
+                if self.map[left_index] is 'J' and (self.map[self.__above(left_index)] is 'X' or self.map[self.__below(left_index)] is 'X'):
+                    # self.__print_map()
+                    return True
+                elif self.map[right_index] is 'J' and (self.map[self.__above(right_index)] is 'X' or self.map[self.__below(left_index)] is 'X'):
+                    # self.__print_map()
+                    return True
+            if self.map[self.__left(jewel_index)] is 'X':
+                above_index = self.__above(jewel_index)
+                below_index = self.__below(jewel_index)
+                if self.map[above_index] is 'J' and (self.map[self.__left(above_index)] is 'X' or self.map[self.__right(above_index)] is 'X'):
+                    # self.__print_map()
+                    return True
+                elif self.map[below_index] is 'J' and (self.map[self.__left(below_index)] is 'X' or self.map[self.__right(below_index)] is 'X'):
+                    # self.__print_map()
+                    return True
+            if self.map[self.__right(jewel_index)] is 'X':
+                above_index = self.__above(jewel_index)
+                below_index = self.__below(jewel_index)
+                if self.map[above_index] is 'J' and (self.map[self.__left(above_index)] is 'X' or self.map[self.__right(above_index)] is 'X'):
+                    # self.__print_map()
+                    return True
+                elif self.map[below_index] is 'J' and (self.map[self.__left(below_index)] is 'X' or self.map[self.__right(above_index)] is 'X'):
+                    # self.__print_map()
                     return True
 
         return False
 
     def __check_win_condition(self, jewel_indices):
         for jewel in jewel_indices:
-            if not jewel in self.goal_indeces:
+            if jewel not in self.goal_indeces:
                 return False
 
         return True
@@ -221,10 +258,11 @@ class Solver:
 
     def __print_map(self):
         print('** Map **')
-        for index_y in range(0, self.height):
+        for index_y in range(0, self.width):
             line = ''
-            for index_x in range(0, self.width):
-                line += self.map[index_y * self.height + index_x]
+            for index_x in range(0, self.height):
+                tile_index = index_y * self.height + index_x
+                line += self.map[tile_index]
 
             print(line)
         pass
