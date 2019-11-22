@@ -24,11 +24,13 @@ class Solver:
 
     def solve_puzzle(self):
         # print('Solving...', self.map)
+        start_time = time.time()
 
         paths = [[self.__get_player_position()]]
         add_state(self.__get_player_position(), self.__get_jewels_positions())
 
         while True:
+            last_path_time = time.time()
             for path_index in range(len(paths) - 1, -1, -1):
                 path = paths[path_index]
                 self.__update_map(path)
@@ -70,7 +72,11 @@ class Solver:
                     # self.__print_map()
 
             # print('paths:', paths)
-            print('paths:', len(paths), 'length:', len(paths[0]))
+            new_path_time = time.time()
+            printed_path_time = int((new_path_time - last_path_time) * 100) / 100
+            printed_total_time = int((new_path_time - start_time) * 100) / 100
+            print('paths:', len(paths), '    length:', len(paths[0]), '    path time:', printed_path_time,
+                  'seconds     total time:', printed_total_time, 'seconds')
             print()
             # time.sleep(.1)
 
