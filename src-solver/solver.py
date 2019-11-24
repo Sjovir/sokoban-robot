@@ -2,11 +2,13 @@ from state import states, add_state, is_state_new, state_to_string
 from typing import Optional
 import time
 
+CAPITALIZED_LETTER_DIFF = 32
+
 class Solver:
     def __init__(self):
         self.map = []
         self.original_map = []
-        self.goal_indeces = -1
+        self.goal_indices = -1
         self.width = -1
         self.height = -1
 
@@ -20,7 +22,7 @@ class Solver:
                         self.original_map.append(tile)       # Add tile to map
 
         self.map = self.original_map.copy()
-        self.goal_indeces = [index for index, condition in enumerate(self.original_map) if condition == 'G']
+        self.goal_indices = [index for index, condition in enumerate(self.original_map) if condition == 'G']
 
     def solve_puzzle(self):
         # print('Solving...', self.map)
@@ -80,9 +82,31 @@ class Solver:
             print()
             # time.sleep(.1)
 
+    def get_moves_from_path(self, path):
+        self.map = self.original_map.copy()
+        moves = ''
+        index = 1
+
+        while index < len(path):
+            destination_tile = path[index]
+            starting_tile = path[index - 1]
+            diff = destination_tile - starting_tile
+
+            direction = self.__get_direction_from_diff(diff)
+
+            if self.map[destination_tile] is 'J':
+                moves += chr(ord(direction) - CAPITALIZED_LETTER_DIFF)
+            else:
+                moves += direction
+
+            self.__move_player(starting_tile, destination_tile, direction)
+            index += 1
+
+        return moves
+
     def __check_deadlock(self, jewel_pos):
         for jewel_index in jewel_pos:
-            if jewel_index in self.goal_indeces:
+            if jewel_index in self.goal_indices:
                 continue
 
             # Jewels in corner
@@ -145,7 +169,7 @@ class Solver:
 
     def __check_win_condition(self, jewel_indices):
         for jewel in jewel_indices:
-            if jewel not in self.goal_indeces:
+            if jewel not in self.goal_indices:
                 return False
 
         return True
@@ -159,19 +183,12 @@ class Solver:
             self.__move_player(starting_tile, destination_tile)
             index += 1
 
-    def __move_player(self, starting_tile, destination_tile):
+    def __move_player(self, starting_tile, destination_tile, direction=''):
         if self.map[destination_tile] is 'J':
             diff = destination_tile - starting_tile
-            direction = ''
 
-            if diff == - self.width:
-                direction = 'up'
-            elif diff == self.width:
-                direction = 'down'
-            elif diff == - 1:
-                direction = 'left'
-            elif diff == 1:
-                direction = 'right'
+            if direction is '':
+                direction = self.__get_direction_from_diff(diff)
 
             tile_index = self.__get_tile(direction, destination_tile)
 
@@ -189,15 +206,15 @@ class Solver:
         return [index for index, condition in enumerate(self.map) if condition == 'J']
 
     def __get_walkable_directions(self, index):
-        up = self.__get_tile('up', index, ['X'])
-        down = self.__get_tile('down', index, ['X'])
-        left = self.__get_tile('left', index, ['X'])
-        right = self.__get_tile('right', index, ['X'])
+        up = self.__get_tile('u', index, ['X'])
+        down = self.__get_tile('d', index, ['X'])
+        left = self.__get_tile('l', index, ['X'])
+        right = self.__get_tile('r', index, ['X'])
 
-        up = self.__validate_jewel_move('up', up)
-        down = self.__validate_jewel_move('down', down)
-        left = self.__validate_jewel_move('left', left)
-        right = self.__validate_jewel_move('right', right)
+        up = self.__validate_jewel_move('u', up)
+        down = self.__validate_jewel_move('d', down)
+        left = self.__validate_jewel_move('l', left)
+        right = self.__validate_jewel_move('r', right)
 
         directions = []
 
@@ -220,13 +237,13 @@ class Solver:
 
     def __get_tile(self, relation, index, remove_conditions=[]):
         try:
-            if relation == 'up':
+            if relation == 'u':
                 tile_index = self.__above(index)
-            elif relation == 'down':
+            elif relation == 'd':
                 tile_index = self.__below(index)
-            elif relation == 'left':
+            elif relation == 'l':
                 tile_index = self.__left(index)
-            elif relation == 'right':
+            elif relation == 'r':
                 tile_index = self.__right(index)
             else:
                 tile_index = -1
@@ -261,6 +278,18 @@ class Solver:
         if tile_index % self.width == 0:
             raise Exception
         return tile_index
+
+    def __get_direction_from_diff(self, diff):
+        if diff == - self.width:
+            return 'u'
+        elif diff == self.width:
+            return 'd'
+        elif diff == - 1:
+            return 'l'
+        elif diff == 1:
+            return 'r'
+        else:
+            return ''
 
     def __print_map(self):
         print('** Map **')
