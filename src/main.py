@@ -43,14 +43,6 @@ class System:
 # ***************************
 # *****    Main Code    *****
 # ***************************
-# def limit_speed(value):
-#     if abs(value) > 900:
-#         if value >= 0:
-#             return 900
-#         else:
-#             return - 900
-#     else:
-#         return value
 
 btn = ev3.Button()
 # system = System()
@@ -61,9 +53,8 @@ drive_behavior = DriveBehavior()
 # intersect_behavior = IntersectBehavior(system.increment_intersection_count)
 # intersect_behavior.turn_on()
 
-# drive_color_sensor = ev3.ColorSensor('in4')
-# left_motor = ev3.LargeMotor('outA')
-# right_motor = ev3.LargeMotor('outD')
+left_motor = ev3.LargeMotor('outA')
+right_motor = ev3.LargeMotor('outD')
 
 btn_pressed = False
 
@@ -74,16 +65,6 @@ while not btn_pressed:
         btn_pressed = True
 
 drive_behavior.read_target_line_color()
-# target_color = drive_color_sensor.value()
-# base_speed = 400
-# kp = 2
-# ki = 0
-# kd = 0
-# last_error = 0
-# integral = 0
-# derivative = 0
-#
-# kp_speed = .2
 
 time.sleep(3)
 
@@ -94,11 +75,9 @@ btn_pressed = False
 while not btn_pressed:
     if btn.any():
         btn_pressed = True
-    # lightData = ultrasonicSensor.value()
-    # print("Distance: ", lightData)
 
-# left_motor.stop()
-# right_motor.stop()
+left_motor.stop()
+right_motor.stop()
 drive_behavior.turn_off()
 # intersect_behavior.turn_off()
 print('Exit')
