@@ -1,60 +1,91 @@
 import ev3dev.ev3 as ev3
 from sys import exit
 import time
+from read_behavior import ReadBehavior
 from drive_behavior import DriveBehavior
-from intersect_behavior import IntersectBehavior
-import max_min_finder
 
 class System:
     def __init__(self):
-        self.intersection_count = 0
-        self.program = {}
+        self.step_count = 0
+        self.program = []
+        self.read_behavior = ReadBehavior()
         self.behaviors = {
-            "DRIVE": DriveBehavior(),
-            "INTERSECT": IntersectBehavior(self.increment_intersection_count)
+            "DRIVE": DriveBehavior(self.next_step, self.read_behavior)
         }
 
-    def increment_intersection_count(self):
-        self.intersection_count += 1
-        # START BEAHIVORS HEERE
-        self.current_behavior = self.program[self.intersection_count]
-
-        # switch (self.current_behavior) {
-        #
-        # }
-
     def load_program(self):
-        # localDirectory = os.path.dirname(os.path.realpath(__file__))
-        # setupFilePath = localDirectory + './config.ini'
-
         with open("program.txt", "r", encoding="ISO-8859-1") as program_file:
             for line in program_file:                   # Read every line of config file
-                key, value = line.strip().split(':')    # Split on delimiter
-                self.program[key] = value
+                for command in range(0, len(line)):
+                    self.program.append(command)
 
-    def run_program(self):
-        self.behaviors["INTERSECT"].turn_on()
-        # while self.program[self.intersection_count] is not "END":
-        #    self.program[self.intersection_count].turn_on()
+        print('Program:', self.program)
+
+    def init(self):
+        self.read_behavior.turn_on()
+        time.sleep(3)
+        self.read_behavior.turn_off()
+        self.behaviors["DRIVE"].turn_on()
+
+    def next_step(self):
+        self.step_count += 1
+        self.continue_step()
+
+    def continue_step(self):
+        last_command = self.program[self.step_count - 1]
+        command = self.program[self.step_count]
+        next_command = self.program[self.step_count + 1]
+        print('Continue - last:', last_command, 'command:', command, 'next:', next_command)
+        if command.isUpper() and next_command.isLower():
+            self.behaviors["DELIVER"].turn_on()
+            return
+
+        direction = self.get_direction(command, last_command)
+        print('Direction:', direction)
+        if direction == 'ccw':
+            pass
+        elif direction == 'cw':
+            pass
+        elif direction == 'forward':
+            self.behaviors["DRIVE"].turn_on()
+        else:
+            pass# Never gonna happen
+
+    def get_direction(self, command, last_command):
+        directions = ['u', 'r', 'd', 'l']
+
+        # reverse command if delivery
+        if last_command.isUpper():
+            last_command = directions[directions.index(last_command.lower()) + 2 % 4]
+
+        command_index = directions.index(command.lower())
+        last_command_index = directions.index(last_command.lower())
+
+        if command_index == last_command_index:
+            return 'forward'
+        elif command_index - 1 % 4 == last_command_index:
+            return 'ccw'
+        elif command_index + 1 % 4 == last_command_index:
+            return 'cw'
+        else:
+            return 'back'
 
     def end(self):
-        self.behaviors["INTERSECT"].turn_off()
+        # self.behaviors["INTERSECT"].turn_off()
+        pass
 
 # ***************************
 # *****    Main Code    *****
 # ***************************
 
 btn = ev3.Button()
-# system = System()
-# system.load_program()
+system = System()
+system.load_program()
+system.init()
+# system.read_colors()
 
-# drive_behavior = DriveBehavior()
-
-# intersect_behavior = IntersectBehavior(system.increment_intersection_count)
-# intersect_behavior.turn_on()
-#
-left_motor = ev3.LargeMotor('outA')
-right_motor = ev3.LargeMotor('outD')
+read_behavior = ReadBehavior()
+drive_behavior = DriveBehavior(read_behavior)
 
 btn_pressed = False
 
@@ -64,21 +95,15 @@ while not btn_pressed:
     if btn.any():
         btn_pressed = True
 
-max_min_finder.run()
+read_behavior.turn_on()
 
-# drive_behavior.read_target_line_color()
+time.sleep(3)
 
-# time.sleep(3)
+read_behavior.turn_off()
 
-# drive_behavior.turn_on()
+time.sleep(5)
 
-btn_pressed = False
-
-while not btn_pressed:
-    if btn.any():
-        btn_pressed = True
-
-import runner
+drive_behavior.turn_on()
 
 btn_pressed = False
 
@@ -86,9 +111,7 @@ while not btn_pressed:
     if btn.any():
         btn_pressed = True
 
-left_motor.stop()
-right_motor.stop()
-# drive_behavior.turn_off()
+drive_behavior.turn_off()
 # intersect_behavior.turn_off()
 print('Exit')
 exit(0)

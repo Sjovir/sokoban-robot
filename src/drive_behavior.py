@@ -1,5 +1,5 @@
 from threading import Thread
-from time import sleep
+import time
 from behavior import Behavior
 
 
@@ -8,8 +8,9 @@ class DriveBehavior(Behavior):
     thread = None
 
     # Constructor.
-    def __init__(self):
+    def __init__(self, next_step, reader):
         super().__init__()
+        self.reader = reader
         self.color_margin = 10
         self.threshold = 5
         self.target_line_color = -1
@@ -30,58 +31,53 @@ class DriveBehavior(Behavior):
 
     # Follow Line.
     def follow_line(self):
-        # P tuning
-        proportional_turn = 1  # proportional gain
-        proportional_speed = self.color_margin - self.color_margin * 0.5
-        last_error = 0
+        self.left_motor.run_direct()
+        self.right_motor.run_direct()
+
+        # PID tuning
+        kp = float(0.65)
+        kd = 1
+        ki = float(0.02)
+
+        power = 60
+        min_ref = self.reader.min_ref
+        max_ref = self.reader.max_ref
+        self.target_line_color = min_ref + (max_ref - min_ref) / 2
+
+        last_error = error = integral = 0
         while self.running:
-
-            # Calculate steering with P
-
-            drive_color_data = self.drive_color_sensor.value()#self.get_limited_drive_color_data(self.target_line_color)
-
-            error = self.target_line_color - drive_color_data
-            if abs(error) < self.threshold:
-                derivative = - error * 0.5
-
-            turn_regulation = (proportional_turn * error) + derivative
-
-            self.navigator.drive(turn_regulation)
-
-            # Prints
-            print("Light:", self.drive_color_sensor.value(), "Turn: ", turn_regulation)
-
+            color_read = self.drive_color_sensor.value()
+            error = self.target_line_color - (100 * (color_read - min_ref) / (max_ref - min_ref))
+            derivative = error - last_error
             last_error = error
-            # Lower speed when high turn value
-            # if abs(error) > self.color_margin - self.color_margin * 0.5:
-            #     speed_regulation = abs(proportional_speed / error) * self.speed
-            # else:
-            #     speed_regulation = self.speed
+            integral = float(0.5) * integral + error
+            turn_regulation = (kp * error + kd * derivative + ki * integral) * -1
 
-            # Determine right or left navigation
-            # if self.navigator.get_speed() + abs(turn_regulation) > 1000:
-            #     if turn_regulation >= 0:
-            #         turn_regulation = 1000 - self.navigator.get_speed()
-            #     else:
-            #         turn_regulation = self.navigator.get_speed() - 1000
+            if turn_regulation >= 0:
+                if turn_regulation > 100:
+                    right_power = 0
+                    left_power = power
+                else:
+                    left_power = power
+                    right_power = power - ((power * turn_regulation) / 100)
+            else:
+                if turn_regulation < -100:
+                    left_power = 0
+                    right_power = power
+                else:
+                    right_power = power
+                    left_power = power + ((power * turn_regulation) / 100)
 
-            # if speed_regulation + abs(turn_regulation) > 1000:
-            #     if turn_regulation >= 0:
-            #         turn_regulation = 1000
-            #     else:
-            #         turn_regulation = - 1000
+            print("Turn reg:", turn_regulation, " color_read: ", color_read, " error: ", error, " derivative: ",
+                  derivative, " lastError: ", last_error, " integral: ", integral)
 
-            # Navigate
-            # self.navigator.set_speed(speed_regulation)
+            self.left_motor.duty_cycle_sp = int(left_power)
+            self.right_motor.duty_cycle_sp = int(right_power)
 
-            # if turn_regulation >= 0:
-            #     self.navigator.drive_right(turn_regulation)
-            # else:
-            #     self.navigator.drive_left(turn_regulation)
-            # self.navigator.drive(turn_regulation)
+            time.sleep(0.01)
 
-
-        self.navigator.stop()
+        self.left_motor.stop()
+        self.right_motor.stop()
 
     def get_limited_drive_color_data(self, target_color):
         drive_color_data = self.drive_color_sensor.value()
