@@ -1,0 +1,221 @@
+Winner Path: [55, 54, 53, 52, 51, 39, 51, 63, 62, 61, 49, 50, 51, 52, 53, 54, 66, 67, 55, 43, 44, 32, 20, 19, 18, 30, 31, 32, 44, 43, 55, 
+54, 53, 41, 40, 28, 16, 15, 14, 26, 27, 15, 16, 28, 40, 28, 27, 26, 38, 39, 51, 52, 53, 54, 66, 67, 55, 43, 44, 32, 20, 21, 22, 34, 33, 
+21, 20, 32, 20, 19, 18, 30, 31, 43, 55, 54, 53, 52, 51, 63, 62, 61, 49, 50, 51, 52, 53, 54, 66, 67, 55, 43, 55, 54, 53, 52, 51, 39, 27, 
+28, 40, 39, 51, 52, 53, 54, 66, 67, 55]
+
+Winner Moves: llllUddlluRRRRRdrUUruulldRRdldlluLuulldRurDDullDRdRRRdrUUruurrdLulDulldRddlllldlluRRRRRdrUUdlllluurDldRRRdrU
+
+ALL:
+paths: 3     length: 2     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 4     length: 3     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 6     length: 4     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 5     length: 5     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 6     length: 6     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 6     length: 7     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 10     length: 8     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 13     length: 9     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 18     length: 10     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 22     length: 11     path time: 0.0 seconds     total time: 0.0 seconds
+
+paths: 33     length: 12     path time: 0.0 seconds     total time: 0.01 seconds
+
+paths: 44     length: 13     path time: 0.0 seconds     total time: 0.01 seconds
+
+paths: 69     length: 14     path time: 0.0 seconds     total time: 0.02 seconds
+
+paths: 81     length: 15     path time: 0.01 seconds     total time: 0.03 seconds
+
+paths: 111     length: 16     path time: 0.01 seconds     total time: 0.04 seconds
+
+paths: 129     length: 17     path time: 0.01 seconds     total time: 0.06 seconds
+
+paths: 176     length: 18     path time: 0.02 seconds     total time: 0.09 seconds
+
+paths: 197     length: 19     path time: 0.03 seconds     total time: 0.13 seconds
+
+paths: 272     length: 20     path time: 0.04 seconds     total time: 0.17 seconds
+
+paths: 294     length: 21     path time: 0.06 seconds     total time: 0.24 seconds
+
+paths: 389     length: 22     path time: 0.09 seconds     total time: 0.34 seconds
+
+paths: 414     length: 23     path time: 0.11 seconds     total time: 0.45 seconds
+
+paths: 533     length: 24     path time: 0.14 seconds     total time: 0.6 seconds
+
+paths: 570     length: 25     path time: 0.18 seconds     total time: 0.78 seconds
+
+paths: 703     length: 26     path time: 0.23 seconds     total time: 1.02 seconds
+
+paths: 733     length: 27     path time: 0.29 seconds     total time: 1.32 seconds
+
+paths: 865     length: 28     path time: 0.37 seconds     total time: 1.7 seconds
+
+paths: 919     length: 29     path time: 0.45 seconds     total time: 2.16 seconds
+
+paths: 1065     length: 30     path time: 0.57 seconds     total time: 2.73 seconds
+
+paths: 1113     length: 31     path time: 0.68 seconds     total time: 3.41 seconds
+
+paths: 1275     length: 32     path time: 0.83 seconds     total time: 4.25 seconds
+
+paths: 1348     length: 33     path time: 0.99 seconds     total time: 5.25 seconds
+
+paths: 1580     length: 34     path time: 1.24 seconds     total time: 6.49 seconds
+
+paths: 1639     length: 35     path time: 1.49 seconds     total time: 7.98 seconds
+
+paths: 1894     length: 36     path time: 1.82 seconds     total time: 9.8 seconds
+
+paths: 1918     length: 37     path time: 2.16 seconds     total time: 11.97 seconds
+
+paths: 2232     length: 38     path time: 2.58 seconds     total time: 14.55 seconds
+
+paths: 2300     length: 39     path time: 3.08 seconds     total time: 17.64 seconds
+
+paths: 2649     length: 40     path time: 3.69 seconds     total time: 21.34 seconds
+
+paths: 2680     length: 41     path time: 4.43 seconds     total time: 25.78 seconds
+
+paths: 2974     length: 42     path time: 5.13 seconds     total time: 30.91 seconds
+
+paths: 2942     length: 43     path time: 5.89 seconds     total time: 36.81 seconds
+
+paths: 3245     length: 44     path time: 6.66 seconds     total time: 43.47 seconds
+
+paths: 3193     length: 45     path time: 7.57 seconds     total time: 51.05 seconds
+
+paths: 3514     length: 46     path time: 8.48 seconds     total time: 59.54 seconds
+
+paths: 3414     length: 47     path time: 9.56 seconds     total time: 69.1 seconds
+
+paths: 3672     length: 48     path time: 10.45 seconds     total time: 79.56 seconds
+
+paths: 3584     length: 49     path time: 11.54 seconds     total time: 91.11 seconds
+
+paths: 3849     length: 50     path time: 12.63 seconds     total time: 103.74 seconds
+
+paths: 3688     length: 51     path time: 13.71 seconds     total time: 117.46 seconds
+
+paths: 3961     length: 52     path time: 14.74 seconds     total time: 132.2 seconds
+
+paths: 3739     length: 53     path time: 15.88 seconds     total time: 148.08 seconds
+
+paths: 3999     length: 54     path time: 16.89 seconds     total time: 164.97 seconds
+
+paths: 3666     length: 55     path time: 17.75 seconds     total time: 182.73 seconds
+
+paths: 3898     length: 56     path time: 18.6 seconds     total time: 201.33 seconds
+
+paths: 3597     length: 57     path time: 23.15 seconds     total time: 224.48 seconds
+
+paths: 3835     length: 58     path time: 21.15 seconds     total time: 245.64 seconds
+
+paths: 3526     length: 59     path time: 23.2 seconds     total time: 268.84 seconds
+
+paths: 3737     length: 60     path time: 22.98 seconds     total time: 291.82 seconds
+
+paths: 3447     length: 61     path time: 24.01 seconds     total time: 315.84 seconds
+
+paths: 3648     length: 62     path time: 22.76 seconds     total time: 338.61 seconds
+
+paths: 3335     length: 63     path time: 23.06 seconds     total time: 361.67 seconds
+
+paths: 3486     length: 64     path time: 23.44 seconds     total time: 385.11 seconds
+
+paths: 3192     length: 65     path time: 23.74 seconds     total time: 408.85 seconds
+
+paths: 3310     length: 66     path time: 24.08 seconds     total time: 432.94 seconds
+
+paths: 3038     length: 67     path time: 25.69 seconds     total time: 458.64 seconds
+
+paths: 3217     length: 68     path time: 32.02 seconds     total time: 490.66 seconds
+
+paths: 3021     length: 69     path time: 37.27 seconds     total time: 527.94 seconds
+
+paths: 3238     length: 70     path time: 38.03 seconds     total time: 565.98 seconds
+
+paths: 2983     length: 71     path time: 38.96 seconds     total time: 604.94 seconds
+
+paths: 3126     length: 72     path time: 38.68 seconds     total time: 643.63 seconds
+
+paths: 2913     length: 73     path time: 38.18 seconds     total time: 681.81 seconds
+
+paths: 3026     length: 74     path time: 38.39 seconds     total time: 720.2 seconds
+
+paths: 2770     length: 75     path time: 38.35 seconds     total time: 758.56 seconds
+
+paths: 2852     length: 76     path time: 37.62 seconds     total time: 796.18 seconds
+
+paths: 2566     length: 77     path time: 37.64 seconds     total time: 833.83 seconds
+
+paths: 2612     length: 78     path time: 36.63 seconds     total time: 870.46 seconds
+
+paths: 2315     length: 79     path time: 35.56 seconds     total time: 906.02 seconds
+
+paths: 2384     length: 80     path time: 34.35 seconds     total time: 940.38 seconds
+
+paths: 2099     length: 81     path time: 33.36 seconds     total time: 973.75 seconds
+
+paths: 2114     length: 82     path time: 31.67 seconds     total time: 1005.42 seconds
+
+paths: 1857     length: 83     path time: 30.66 seconds     total time: 1036.08 seconds
+
+paths: 1862     length: 84     path time: 30.01 seconds     total time: 1066.09 seconds
+
+paths: 1621     length: 85     path time: 31.03 seconds     total time: 1097.13 seconds
+
+paths: 1584     length: 86     path time: 27.37 seconds     total time: 1124.51 seconds
+
+paths: 1342     length: 87     path time: 26.08 seconds     total time: 1150.59 seconds
+
+paths: 1297     length: 88     path time: 17.84 seconds     total time: 1168.44 seconds
+
+paths: 1096     length: 89     path time: 14.95 seconds     total time: 1183.39 seconds
+
+paths: 1074     length: 90     path time: 13.06 seconds     total time: 1196.45 seconds
+
+paths: 919     length: 91     path time: 12.15 seconds     total time: 1208.61 seconds
+
+paths: 880     length: 92     path time: 10.94 seconds     total time: 1219.56 seconds
+
+paths: 739     length: 93     path time: 9.91 seconds     total time: 1229.47 seconds
+
+paths: 703     length: 94     path time: 8.81 seconds     total time: 1238.28 seconds
+
+paths: 587     length: 95     path time: 7.92 seconds     total time: 1246.21 seconds
+
+paths: 585     length: 96     path time: 7.26 seconds     total time: 1253.47 seconds
+
+paths: 494     length: 97     path time: 6.7 seconds     total time: 1260.17 seconds
+
+paths: 509     length: 98     path time: 6.23 seconds     total time: 1266.41 seconds
+
+paths: 436     length: 99     path time: 6.32 seconds     total time: 1272.73 seconds
+
+paths: 405     length: 100     path time: 5.96 seconds     total time: 1278.7 seconds
+
+paths: 330     length: 101     path time: 4.79 seconds     total time: 1283.49 seconds
+
+paths: 315     length: 102     path time: 4.14 seconds     total time: 1287.64 seconds
+
+paths: 263     length: 103     path time: 3.68 seconds     total time: 1291.33 seconds
+
+paths: 265     length: 104     path time: 3.36 seconds     total time: 1294.7 seconds
+
+paths: 222     length: 105     path time: 3.12 seconds     total time: 1297.83 seconds
+
+paths: 218     length: 106     path time: 3.19 seconds     total time: 1301.02 seconds
+
+paths: 179     length: 107     path time: 2.73 seconds     total time: 1303.75 seconds
+
+paths: 176     length: 108     path time: 2.52 seconds     total time: 1306.28 seconds
