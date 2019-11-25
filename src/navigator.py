@@ -10,6 +10,7 @@ class Navigator:
     def start(self):
         self.left_motor.run_direct()
         self.right_motor.run_direct()
+        print('started')
     
     def forward(self):
         self.left_motor.run_timed(time_sp=self.dt, speed_sp=self.speed)
@@ -22,6 +23,7 @@ class Navigator:
         right = self.limit_drive(self.speed - compensate_speed)
         self.left_motor.run_forever(speed_sp=left)
         self.right_motor.run_forever(speed_sp=right)
+        # print('left:', left, 'right', right)
 
     def drive_left(self, compensate_speed):
         left = self.limit_drive(self.speed + compensate_speed)

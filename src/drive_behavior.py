@@ -11,6 +11,7 @@ class DriveBehavior(Behavior):
     def __init__(self):
         super().__init__()
         self.color_margin = 10
+        self.threshold = 5
         self.target_line_color = -1
 
     # Start Method.
@@ -30,19 +31,27 @@ class DriveBehavior(Behavior):
     # Follow Line.
     def follow_line(self):
         # P tuning
-        proportional_turn = 2  # proportional gain
+        proportional_turn = 1  # proportional gain
         proportional_speed = self.color_margin - self.color_margin * 0.5
-
+        last_error = 0
         while self.running:
 
             # Calculate steering with P
-            drive_color_data = self.target_line_color - self.get_limited_drive_color_data(self.target_line_color)
-            error = drive_color_data
 
-            turn_regulation = (proportional_turn * error)  # + (Ki * integral) + (Kd * derivative)
+            drive_color_data = self.drive_color_sensor.value()#self.get_limited_drive_color_data(self.target_line_color)
+
+            error = self.target_line_color - drive_color_data
+            if abs(error) < self.threshold:
+                derivative = - error * 0.5
+
+            turn_regulation = (proportional_turn * error) + derivative
 
             self.navigator.drive(turn_regulation)
 
+            # Prints
+            print("Light:", self.drive_color_sensor.value(), "Turn: ", turn_regulation)
+
+            last_error = error
             # Lower speed when high turn value
             # if abs(error) > self.color_margin - self.color_margin * 0.5:
             #     speed_regulation = abs(proportional_speed / error) * self.speed
@@ -71,8 +80,6 @@ class DriveBehavior(Behavior):
             #     self.navigator.drive_left(turn_regulation)
             # self.navigator.drive(turn_regulation)
 
-            # Prints
-            print("Light:", self.drive_color_sensor.value(), "Turn: ", turn_regulation, "Speed:", speed_regulation)
 
         self.navigator.stop()
 

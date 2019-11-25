@@ -3,7 +3,7 @@ from sys import exit
 import time
 from drive_behavior import DriveBehavior
 from intersect_behavior import IntersectBehavior
-
+import max_min_finder
 
 class System:
     def __init__(self):
@@ -48,11 +48,11 @@ btn = ev3.Button()
 # system = System()
 # system.load_program()
 
-drive_behavior = DriveBehavior()
+# drive_behavior = DriveBehavior()
 
 # intersect_behavior = IntersectBehavior(system.increment_intersection_count)
 # intersect_behavior.turn_on()
-
+#
 left_motor = ev3.LargeMotor('outA')
 right_motor = ev3.LargeMotor('outD')
 
@@ -64,11 +64,21 @@ while not btn_pressed:
     if btn.any():
         btn_pressed = True
 
-drive_behavior.read_target_line_color()
+max_min_finder.run()
 
-time.sleep(3)
+# drive_behavior.read_target_line_color()
 
-drive_behavior.turn_on()
+# time.sleep(3)
+
+# drive_behavior.turn_on()
+
+btn_pressed = False
+
+while not btn_pressed:
+    if btn.any():
+        btn_pressed = True
+
+import runner
 
 btn_pressed = False
 
@@ -78,7 +88,7 @@ while not btn_pressed:
 
 left_motor.stop()
 right_motor.stop()
-drive_behavior.turn_off()
+# drive_behavior.turn_off()
 # intersect_behavior.turn_off()
 print('Exit')
 exit(0)
