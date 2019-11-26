@@ -10,6 +10,7 @@ class DriveBehavior(Behavior):
     # Constructor.
     def __init__(self, next_step, reader):
         super().__init__()
+        self.next_step = next_step
         self.reader = reader
         self.color_margin = 10
         self.threshold = 5
@@ -20,10 +21,12 @@ class DriveBehavior(Behavior):
         self.running = True
         thread = Thread(target=self.follow_line)
         thread.start()
+        print('Turn on DriveBehavior')
 
     # Stop Method.
     def turn_off(self):
         self.running = False
+        print('Turn off DriveBehavior')
 
     # Read target line color
     def read_target_line_color(self):
@@ -46,7 +49,11 @@ class DriveBehavior(Behavior):
 
         last_error = error = integral = 0
         while self.running:
-            color_read = self.drive_color_sensor.value()
+            color_read = self.target_line_color
+            try:
+                color_read = self.drive_color_sensor.value()
+            except ValueError:
+                print('Follow line Error:', color_read)
             error = self.target_line_color - (100 * (color_read - min_ref) / (max_ref - min_ref))
             derivative = error - last_error
             last_error = error
@@ -75,6 +82,15 @@ class DriveBehavior(Behavior):
             self.right_motor.duty_cycle_sp = int(right_power)
 
             time.sleep(0.01)
+
+            intersect_read = max_ref
+            try:
+                intersect_read = self.intersect_color_sensor.value()
+            except ValueError:
+                print('Intersect Error:', intersect_read)
+            if intersect_read < min_ref + 10 and self.running:
+                self.turn_off()
+                self.next_step()
 
         self.left_motor.stop()
         self.right_motor.stop()
