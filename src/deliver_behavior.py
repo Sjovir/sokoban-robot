@@ -12,9 +12,9 @@ class DeliverBehavior(Behavior):
         super().__init__()
         self.continue_method = continue_method
         self.reader = reader
-        self.speed = 40
-        self.turn_speed = 30
-        self.free_run = 0.4
+        self.power = 40
+        self.turn_speed = 20
+        self.free_run = 0.5
         self.target_passed = False
         self.intersect_hit = False
         self.next_direction = ''
@@ -25,41 +25,40 @@ class DeliverBehavior(Behavior):
         thread = Thread(target=self.turn)
         self.next_direction = next_direction
         thread.start()
-        print('Turn on DeliverBehavior')
 
     # Stop Method.
     def turn_off(self):
         self.running = False
-        print('Turn off DeliverBehavior')
 
     # Turn robot 180 degrees
     def turn(self):
         # Free run
-        self.left_motor.run_direct(duty_cycle_sp=-self.speed)
-        self.right_motor.run_direct(duty_cycle_sp=-self.speed)
+        self.left_motor.run_direct(duty_cycle_sp=-self.power)
+        self.right_motor.run_direct(duty_cycle_sp=-self.power)
 
         time.sleep(self.free_run)
 
         # Initial settings.
         if self.next_direction is 'cw':
-            self.left_motor.run_direct(duty_cycle_sp=self.turn_speed)
-            self.right_motor.run_direct(duty_cycle_sp=-self.turn_speed)
-        else:
             self.left_motor.run_direct(duty_cycle_sp=-self.turn_speed)
             self.right_motor.run_direct(duty_cycle_sp=self.turn_speed)
+        else:
+            self.left_motor.run_direct(duty_cycle_sp=self.turn_speed)
+            self.right_motor.run_direct(duty_cycle_sp=-self.turn_speed)
 
         min_ref = self.reader.min_ref
 
-        time.sleep(0.7)
+        time.sleep(1)
         while self.running:
             color_read = self.drive_color_sensor.value()
 
-            if color_read < min_ref + 1:
-                self.target_passed = True
+            if color_read < min_ref + 10:
                 if self.next_direction is 'cw':
                     self.stop()
+                elif color_read < min_ref + 5:
+                    self.target_passed = True
 
-            if self.target_passed and color_read > min_ref + 1:
+            if self.target_passed and color_read > min_ref + 5:
                 self.stop()
 
     def stop(self):

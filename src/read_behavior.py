@@ -10,8 +10,10 @@ class ReadBehavior(Behavior):
     # Constructor.
     def __init__(self):
         super().__init__()
-        self.max_ref = 0
         self.min_ref = 100
+        self.max_ref = 0
+        self.intersect_min_ref = 100
+        self.intersect_max_ref = 0
 
     # Start Method.
     def turn_on(self):
@@ -34,7 +36,16 @@ class ReadBehavior(Behavior):
             if self.min_ref > read:
                 self.min_ref = read
 
+            intersect_read = self.intersect_color_sensor.value()
+            if self.intersect_max_ref < intersect_read:
+                self.intersect_max_ref = intersect_read
+            if self.intersect_min_ref > intersect_read:
+                self.intersect_min_ref = intersect_read
+            print('1:', read, '2:', intersect_read)
+
         self.left_motor.stop()
         self.right_motor.stop()
-        print('Max:', self.max_ref)
         print('Min:', self.min_ref)
+        print('Max:', self.max_ref)
+        print('Intersect Min:', self.intersect_min_ref)
+        print('Intersect Max:', self.intersect_max_ref)

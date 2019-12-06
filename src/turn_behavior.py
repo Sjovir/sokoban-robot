@@ -13,9 +13,9 @@ class TurnBehavior(Behavior):
         self.reader = reader
         self.direction = ''
         self.last_command_deliver = False
-        self.speed = 60
-        self.turn_speed = 30
-        self.free_run = 0.3
+        self.power = 40
+        self.turn_speed = 20
+        self.free_run = 0.6
         self.target_passed = False
 
     # Start Method.
@@ -25,7 +25,6 @@ class TurnBehavior(Behavior):
         self.last_command_deliver = last_command_deliver
         thread = Thread(target=self.turn)
         thread.start()
-        print('Turn on TurnBehavior')
 
     # Stop Method.
     def turn_off(self, is_self=False):
@@ -36,30 +35,29 @@ class TurnBehavior(Behavior):
 
         if is_self:
             self.continue_method()
-        print('Turn off TurnBehavior')
 
     # Turn robot clockwise or counter clockwise
     def turn(self):
         # Free run
-        self.left_motor.run_direct(duty_cycle_sp=self.speed)
-        self.right_motor.run_direct(duty_cycle_sp=self.speed)
-        print("Long run:", self.last_command_deliver)
+        self.left_motor.run_direct(duty_cycle_sp=self.power)
+        self.right_motor.run_direct(duty_cycle_sp=self.power)
+
         if self.last_command_deliver:
             time.sleep(self.free_run + 0.2)
-        else:
-            time.sleep(self.free_run)
+
+        time.sleep(self.free_run)
 
         # Initial settings.
         if self.direction is 'ccw':
-            self.left_motor.run_direct(duty_cycle_sp=-self.turn_speed * 2)
+            self.left_motor.run_direct(duty_cycle_sp=-self.turn_speed)
             self.right_motor.run_direct(duty_cycle_sp=self.turn_speed)
         elif self.direction is 'cw':
             self.left_motor.run_direct(duty_cycle_sp=self.turn_speed)
-            self.right_motor.run_direct(duty_cycle_sp=-self.turn_speed * 2)
+            self.right_motor.run_direct(duty_cycle_sp=-self.turn_speed)
 
         min_ref = self.reader.min_ref
 
-        time.sleep(0.3)
+        time.sleep(0.7)
         while self.running:
             color_read = self.drive_color_sensor.value()
 
