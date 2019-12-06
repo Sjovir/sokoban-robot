@@ -25,7 +25,6 @@ class Solver:
         self.goal_indices = [index for index, condition in enumerate(self.original_map) if condition == 'G']
 
     def solve_puzzle(self):
-        # print('Solving...', self.map)
         start_time = time.time()
 
         paths = [[self.__get_player_position()]]
@@ -40,7 +39,6 @@ class Solver:
                 player_pos = path[-1]
                 moves = self.__get_walkable_directions(player_pos)
 
-                # print('** checking:', path, '** Valid moves:', moves, ' ** jewel:')
                 for index in range(len(moves) - 1, -1, -1):
                     self.__update_map(path)
 
@@ -71,16 +69,13 @@ class Solver:
                             return new_path
 
                         paths.append(new_path)
-                    # self.__print_map()
 
-            # print('paths:', paths)
             new_path_time = time.time()
             printed_path_time = int((new_path_time - last_path_time) * 100) / 100
             printed_total_time = int((new_path_time - start_time) * 100) / 100
             print('paths:', len(paths), '    length:', len(paths[0]), '    path time:', printed_path_time,
                   'seconds     total time:', printed_total_time, 'seconds')
             print()
-            # time.sleep(.1)
 
     def get_moves_from_path(self, path):
         self.map = self.original_map.copy()
@@ -112,19 +107,15 @@ class Solver:
             # Jewels in corner
             if self.map[self.__above(jewel_index)] is 'X':
                 if self.map[self.__left(jewel_index)] is 'X' or self.map[self.__right(jewel_index)] is 'X':
-                    # self.__print_map()
                     return True
             if self.map[self.__below(jewel_index)] is 'X':
                 if self.map[self.__left(jewel_index)] is 'X' or self.map[self.__right(jewel_index)] is 'X':
-                    # self.__print_map()
                     return True
             if self.map[self.__left(jewel_index)] is 'X':
                 if self.map[self.__above(jewel_index)] is 'X' or self.map[self.__below(jewel_index)] is 'X':
-                    # self.__print_map()
                     return True
             if self.map[self.__right(jewel_index)] is 'X':
                 if self.map[self.__above(jewel_index)] is 'X' or self.map[self.__below(jewel_index)] is 'X':
-                    # self.__print_map()
                     return True
 
             # Jewels next to each other next to walls
@@ -132,37 +123,29 @@ class Solver:
                 left_index = self.__left(jewel_index)
                 right_index = self.__right(jewel_index)
                 if self.map[left_index] is 'J' and (self.map[self.__above(left_index)] is 'X' or self.map[self.__below(left_index)] is 'X'):
-                    # self.__print_map()
                     return True
                 elif self.map[right_index] is 'J' and (self.map[self.__above(right_index)] is 'X' or self.map[self.__below(left_index)] is 'X'):
-                    # self.__print_map()
                     return True
             if self.map[self.__below(jewel_index)] is 'X':
                 left_index = self.__left(jewel_index)
                 right_index = self.__right(jewel_index)
                 if self.map[left_index] is 'J' and (self.map[self.__above(left_index)] is 'X' or self.map[self.__below(left_index)] is 'X'):
-                    # self.__print_map()
                     return True
                 elif self.map[right_index] is 'J' and (self.map[self.__above(right_index)] is 'X' or self.map[self.__below(left_index)] is 'X'):
-                    # self.__print_map()
                     return True
             if self.map[self.__left(jewel_index)] is 'X':
                 above_index = self.__above(jewel_index)
                 below_index = self.__below(jewel_index)
                 if self.map[above_index] is 'J' and (self.map[self.__left(above_index)] is 'X' or self.map[self.__right(above_index)] is 'X'):
-                    # self.__print_map()
                     return True
                 elif self.map[below_index] is 'J' and (self.map[self.__left(below_index)] is 'X' or self.map[self.__right(below_index)] is 'X'):
-                    # self.__print_map()
                     return True
             if self.map[self.__right(jewel_index)] is 'X':
                 above_index = self.__above(jewel_index)
                 below_index = self.__below(jewel_index)
                 if self.map[above_index] is 'J' and (self.map[self.__left(above_index)] is 'X' or self.map[self.__right(above_index)] is 'X'):
-                    # self.__print_map()
                     return True
                 elif self.map[below_index] is 'J' and (self.map[self.__left(below_index)] is 'X' or self.map[self.__right(above_index)] is 'X'):
-                    # self.__print_map()
                     return True
 
         return False
@@ -300,4 +283,3 @@ class Solver:
                 line += self.map[tile_index]
 
             print(line)
-        pass
